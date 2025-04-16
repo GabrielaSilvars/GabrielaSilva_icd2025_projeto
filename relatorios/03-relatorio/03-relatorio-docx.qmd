@@ -3,15 +3,10 @@ title: "Caso Junglivet Whisky Company"
 subtitle: "Introdução à CRISP-DM, RStudio, Sistema Quarto e Linguagem R"
 lang: pt-BR
 author: "Seu Nome"
-date: 2025-04-02
+date: 2025-04-16
 format: 
-  html:
-    theme: journal
-    embed-resources: true
-    toc: true
+  docx:
     number-sections: true
-    code-tools: true
-    code-fold: true
 execute:
   message: false
   warning: false

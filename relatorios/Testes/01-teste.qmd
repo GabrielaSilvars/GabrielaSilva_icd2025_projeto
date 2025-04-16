@@ -54,9 +54,10 @@ Para inserir uma célula de código R em um arquivo quarto, podemos usar o atalh
 
 ```{r}
 # simulando uma VA com distribuição normal padrão
-x <- rnorm(1000)
+x <-rnorm(1000)
 
 # gráfico de linha da variavel simulada
-plot(x, type="") 
+plot(x, type ="l") 
 ```
+
 

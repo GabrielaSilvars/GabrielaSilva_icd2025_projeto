@@ -2,7 +2,7 @@
 title: "Introdução à Manipulação de Dados com o Pacote dplyr"
 subtitle: "Disciplina: Introducão à Ciência de Dados"
 lang: pt-BR
-author: "Seu Nome"
+author: Gabriela
 date: 2025-04-23
 format: 
   html:
@@ -232,7 +232,10 @@ Mostrando que o gapminder já está no formato tidy:
 # exibe as 6 primeiras linhas do objeto gapminder
 head(gapminder)
 ```
-
+```{r}
+#A função tail exibe as seis ultimas linhas do objeto gapminder
+tail(gapminder)
+```
 
 
 
@@ -413,16 +416,25 @@ anterior.
 a expectativa de vida:
 
 ```{r}
+#selecionar apenas o país, o ano e a expectativa de vida:
 dados_expectativa <- gapminder %>%
-  select(___, ___, ___)
-```
+  select(country, year, lifeExp)
 
+# exibe as primeiras 6 linhas do resultado
+head(dados_expectativa)
+
+```
 
 2. Escreva o código para selecionar todas as variáveis EXCETO população 
 e PIB per capita.
 
 ```{r}
-# seu código aqui
+# seleciona todas as variáveis, exceto população e pib per capita
+dados_sem_pop_pib <- gapminder %>%
+  select(-pop, -gdpPercap) # seleção por exclusão
+
+# exibe as primeiras 6 linhas do resultado
+head(dados_sem_pop_pib)
 ```
 
 
@@ -431,14 +443,20 @@ e PIB per capita.
 3. Complete o código abaixo para selecionar apenas as variáveis que 
 começam com a letra "c":
 
-```{r}
+```{r} 
+# seleciona apenas as variáveis que começam com a letra "c"
 variaveis_com_c <- gapminder %>%
-  select(___(___))
+  select(starts_with("c"))
+
+# exibe as primeiras 6 linhas do resultado
+head(variaveis_com_c)
 ```
 
 
 ```{r}
-# seu código aqui
+gapminder %>% select(country:pop)
+
+
 ```
 
 
@@ -447,7 +465,12 @@ variaveis_com_c <- gapminder %>%
 até "pop" (em sequência na tabela).
 
 ```{r}
-# seu código aqui
+# selecionar todas as variáveis entre "country" e "pop"
+variaveis_sequencia <- gapminder %>%
+  select(country:pop)
+
+# exibe as primeiras 6 linhas do resultado
+head(variaveis_sequencia)
 ```
 
 
@@ -459,7 +482,13 @@ diferentes na mesma instrução:
 
 
 ```{r}
-# seu código aqui
+# seleciona todas as variáveis que contêm a letra "p" OU
+# que terminam com "p"
+variaveis_combinadas <- gapminder %>%
+  select(contains("p") | ends_with("p"))
+
+# exibe as primeiras 6 linhas do resultado
+head(variaveis_combinadas)
 ```
 
 
@@ -653,15 +682,25 @@ Observe o fluxo de análise:
 do Sul no ano de 2007:
 
 ```{r}
-paises_america_2007 <- gapminder %>%
-  filter(continent == "___", year == ___)
+
+# dados apenas dos países da América do Sul no ano 2007
+paises_americas_2007 <- gapminder %>%
+  filter(continent == "Americas", year == 2007)
+
+# exibe as primeiras 6 linhas do resultado
+head(paises_americas_2007)
 ```
 
 
 2. Filtre a data frame gapminder para mostrar apenas os dados do Brasil:
 
 ```{r}
-# seu codigo aqui
+# dados apenas sobre o Brasil
+dados_brasil <- gapminder %>%
+  filter(country == "Brazil")
+
+# exibe as primeiras 6 linhas do resultado
+head(dados_brasil)
 ```
 
 
@@ -674,7 +713,14 @@ paises_america_2007 <- gapminder %>%
 - Dados do ano 2007
 
 ```{r}
-# seu codigo aqui
+paises_asia_populosos_2007 <- gapminder %>%
+  filter(continent == "Asia" &
+    pop > 50000000 &
+    year == 2007)
+
+# exibindo todos as observações (linhas)
+# do resultado
+print(paises_asia_populosos_2007, n = Inf)
 ```
 
 
@@ -682,7 +728,16 @@ paises_america_2007 <- gapminder %>%
 mas PIB per capita abaixo de 10.000 dólares em 2007.
 
 ```{r}
-# seu codigo aqui
+paises_desafio <- gapminder %>%
+  filter(
+    lifeExp > 75 &
+      gdpPercap < 10000 &
+      year == 2007
+  )
+
+# exibindo todos as observações (linhas)
+# do resultado
+print(paises_desafio, n = Inf)
 ```
 
 
@@ -848,8 +903,11 @@ paises_classificados
 a população para milhões:
 
 ```{r}
-gapminder %>%
-  mutate(pop_em_milhoes = ___)
+dados_novavariavel <- gapminder %>%
+  mutate(pop_em_milhoes = pop / 1000000)
+
+# exibe as 6 primeiras linhas de uma df
+head(dados_novavariavel)
 ```
 
 
@@ -857,7 +915,11 @@ gapminder %>%
 (PIB per capita × população) para cada país.
 
 ```{r}
-# seu codigo aqui
+dados_pib_total <- gapminder %>%
+  mutate(pib_total = gdpPercap * pop)
+
+# exibe as 6 primeiras linhas de uma df
+head(dados_pib_total)
 ```
 
 
@@ -869,7 +931,11 @@ seja "Sim" quando a população for maior que 50 milhões e "Não"
 caso contrário.
 
 ```{r}
-# seu codigo aqui
+dados_economia_grande <- gapminder %>%
+  mutate(economia_grande = ifelse(pop > 50000000, "Sim", "Não"))
+
+# exibe todas as linhas da df
+print(dados_economia_grande, n = Inf)
 ```
 
 
@@ -881,7 +947,16 @@ os países em três categorias baseadas na expectativa de vida:
 - "Alta": mais de 75 anos
 
 ```{r}
-# seu codigo aqui
+multiplas_categorias <- gapminder %>%
+  filter(year == 2007) %>%
+  mutate(categoria_expectativa = case_when(
+    lifeExp < 60 ~ "Baixa",
+    lifeExp >= 60 & lifeExp <= 75 ~ "Média",
+    lifeExp > 75 ~ "Alta"
+  ))
+
+# exibe todas as linhas da df
+print(multiplas_categorias, n = Inf)
 ```
 
 
@@ -1085,6 +1160,48 @@ de vida média de seus países em 2007. Use group_by(), summarize() e arrange().
 ```{r}
 # seu codigo aqui
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
